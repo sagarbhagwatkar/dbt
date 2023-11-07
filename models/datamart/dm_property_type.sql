@@ -3,6 +3,7 @@ WITH MonthlyData AS (
         dp.property_type,
         dr.room_type,
         df.accommodates,
+        df.listing_neighbourhood,
         EXTRACT(MONTH FROM TO_DATE(df.scraped_date, 'YYYY-MM-DD')) || '/' || EXTRACT(YEAR FROM TO_DATE(df.scraped_date, 'YYYY-MM-DD')) AS month_year,
         COUNT(CASE WHEN df.has_availability = 't' THEN df.listing_id END) AS active_listings,
         COUNT(CASE WHEN df.has_availability = 'f' THEN df.listing_id END) AS inactive_listings,
@@ -25,7 +26,7 @@ WITH MonthlyData AS (
     JOIN
         {{ ref('dim_room') }} dr ON df.listing_id = dr.listing_id
     GROUP BY
-        dp.property_type, dr.room_type, df.accommodates, EXTRACT(YEAR FROM TO_DATE(df.scraped_date, 'YYYY-MM-DD')), EXTRACT(MONTH FROM TO_DATE(df.scraped_date, 'YYYY-MM-DD'))
+        df.listing_neighbourhood,dp.property_type, dr.room_type, df.accommodates, EXTRACT(YEAR FROM TO_DATE(df.scraped_date, 'YYYY-MM-DD')), EXTRACT(MONTH FROM TO_DATE(df.scraped_date, 'YYYY-MM-DD'))
 )
 SELECT
     md.property_type,
@@ -45,6 +46,7 @@ SELECT
     md.avg_price,
     md.avg_review_scores_rating,
     md.total_stays,
-    md.avg_estimated_revenue
+    md.avg_estimated_revenue,
+    md.listing_neighbourhood
 FROM
     MonthlyData md

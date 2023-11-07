@@ -36,6 +36,7 @@ EstimatedRevenue AS (
 )
 -- Calculate total estimated revenue per active listings and total distinct hosts
 SELECT
+    DISTINCT host_id as host_id,
     host_neighbourhood_lga,
     month_year,
     SUM(estimated_revenue) AS total_estimated_revenue,
@@ -45,5 +46,5 @@ SELECT
 FROM
     EstimatedRevenue
 GROUP BY
-    host_neighbourhood_lga, month_year
+    host_neighbourhood_lga, month_year, host_id
 

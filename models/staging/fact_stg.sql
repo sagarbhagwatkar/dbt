@@ -8,6 +8,7 @@ SELECT
     HOST_IS_SUPERHOST, 
     availability_30, 
     number_of_reviews, 
+    listing_neighbourhood,
     COALESCE(review_scores_rating::double precision, 
              (SELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY review_scores_rating::double precision) 
               FROM raw.listing 
